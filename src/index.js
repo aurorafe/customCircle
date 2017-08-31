@@ -322,3 +322,53 @@ ol.plugins.CustomCircle.prototype.mathRadius = function (coords) {
   }
   this.overlay.setPosition(this.geom.getLastCoordinate())
 }
+
+/**
+ * 获取圆的空间信息
+ * @returns {ol.geom.Geometry|*}
+ */
+ol.plugins.CustomCircle.prototype.getGeometry = function () {
+  if (this.geom) {
+    return this.geom
+  } else {
+    console.info('未创建空间几何！')
+  }
+}
+
+/**
+ * 获取圆的中心点
+ * @returns {ol.Coordinate|ol.Coordinate|undefined|*}
+ */
+ol.plugins.CustomCircle.prototype.getCenter = function () {
+  return this.geom.getCenter()
+}
+
+/**
+ * 获取圆的半径
+ * @returns {number|*}
+ */
+ol.plugins.CustomCircle.prototype.getRadius = function () {
+  return this.geom.getRadius()
+}
+
+/**
+ * 设置圆的半径
+ * @param radius
+ */
+ol.plugins.CustomCircle.prototype.setRadius = function (radius) {
+  this.radius = radius
+  this.geom = this._getCircleGeom()
+  this.circleFeature.setGeometry(this.geom)
+  this.dispachChange()
+}
+
+/**
+ * 设置圆的中心
+ * @param center
+ */
+ol.plugins.CustomCircle.prototype.setCenter = function (center) {
+  this.center = center
+  this.centerCopy = ol.proj.transform(center, this._getProjectionCode(), 'EPSG:4326')
+  this.geom.setCenter(center)
+  this.dispachChange()
+}
