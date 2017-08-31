@@ -7,7 +7,10 @@ import * as htmlUtils from 'nature-dom-util/src/utils/domUtils'
 import * as utils from 'nature-dom-util/src/utils/utils'
 import * as css from './dom/css'
 import * as style from './style/style'
-ol.geom.CustomCircle = function (params) {
+if (!ol.plugins) {
+  ol.plugins = {}
+}
+ol.plugins.CustomCircle = function (params) {
   /**
    * 当前配置
    * @type {*}
@@ -89,13 +92,11 @@ ol.geom.CustomCircle = function (params) {
   this.initCircle(this.options['center'])
 }
 
-ol.inherits(ol.geom.CustomCircle, ol.geom.Geometry)
-
 /**
  * 创建一个圆 创建一个要素
  * @param center
  */
-ol.geom.CustomCircle.prototype.initCircle = function (center) {
+ol.plugins.CustomCircle.prototype.initCircle = function (center) {
   this.center = center
   this.centerCopy = ol.proj.transform(center, this._getProjectionCode(), 'EPSG:4326')
   this.geom = this._getCircleGeom()
@@ -137,7 +138,7 @@ ol.geom.CustomCircle.prototype.initCircle = function (center) {
  * @returns {string}
  * @private
  */
-ol.geom.CustomCircle.prototype._getProjectionCode = function () {
+ol.plugins.CustomCircle.prototype._getProjectionCode = function () {
   let code = ''
   if (this.map) {
     code = this.map.getView().getProjection().getCode()
@@ -152,7 +153,7 @@ ol.geom.CustomCircle.prototype._getProjectionCode = function () {
  * @returns {ol.geom.Geometry}
  * @private
  */
-ol.geom.CustomCircle.prototype._getCircleGeom = function () {
+ol.plugins.CustomCircle.prototype._getCircleGeom = function () {
   let sourceGeom = new ol.geom.Circle(this.centerCopy, (this.transformRadius(this.centerCopy, this.radius)))
   let geom = sourceGeom.transform('EPSG:4326', this._getProjectionCode())
   return geom
@@ -164,7 +165,7 @@ ol.geom.CustomCircle.prototype._getCircleGeom = function () {
  * @param meterRadius
  * @returns {number}
  */
-ol.geom.CustomCircle.prototype.transformRadius = function (center, meterRadius) {
+ol.plugins.CustomCircle.prototype.transformRadius = function (center, meterRadius) {
   try {
     let lastCoords = this.sphare.offset(center, meterRadius, (270 / 360) * 2 * Math.PI) // 计算偏移量
     let [ptx, pty] = [(center[0] - lastCoords[0]), (center[1] - lastCoords[1])]
@@ -179,7 +180,7 @@ ol.geom.CustomCircle.prototype.transformRadius = function (center, meterRadius) 
  * extent 适当更新范围
  * @param extent
  */
-ol.geom.CustomCircle.prototype.zoomToExtent = function (extent) {
+ol.plugins.CustomCircle.prototype.zoomToExtent = function (extent) {
   if (this.map) {
     let view = this.map.getView()
     let size = this.map.getSize()
@@ -193,7 +194,7 @@ ol.geom.CustomCircle.prototype.zoomToExtent = function (extent) {
  * 添加中心点
  * @param layer
  */
-ol.geom.CustomCircle.prototype.addCenterPoint = function (layer) {
+ol.plugins.CustomCircle.prototype.addCenterPoint = function (layer) {
   this.centerPoint = new ol.Feature({
     geometry: new ol.geom.Point(this.center)
   })
@@ -216,7 +217,7 @@ ol.geom.CustomCircle.prototype.addCenterPoint = function (layer) {
 /**
  * 添加编辑器
  */
-ol.geom.CustomCircle.prototype.addEditor = function () {
+ol.plugins.CustomCircle.prototype.addEditor = function () {
   let editor = htmlUtils.create('div', css.CLASS_CUSTOM_CIRCLE, document.body)
   let button = htmlUtils.create('span', css.CLASS_CUSTOM_CIRCLE_BUTTON, editor, ('editor_' + utils.getuuid()))
   this.handleLabel = htmlUtils.create('span', css.CLASS_CUSTOM_CIRCLE_HANDLELABEL, editor)
@@ -235,7 +236,7 @@ ol.geom.CustomCircle.prototype.addEditor = function () {
  * 拖拽按钮事件处理
  * @param button
  */
-ol.geom.CustomCircle.prototype.addEventHandle = function (button) {
+ol.plugins.CustomCircle.prototype.addEventHandle = function (button) {
   if (button && button instanceof Element) {
     button.addEventListener('mousedown', event => {
       if (event.preventDefault) {
@@ -278,7 +279,7 @@ ol.geom.CustomCircle.prototype.addEventHandle = function (button) {
 /**
  * 拖拽完成信息返回
  */
-ol.geom.CustomCircle.prototype.dispachChange = function () {
+ol.plugins.CustomCircle.prototype.dispachChange = function () {
   if (this.options['onRadiusChangeEnd'] && typeof this.options['onRadiusChangeEnd'] === 'function') {
     this.options['onRadiusChangeEnd'](this)
   }
@@ -288,7 +289,7 @@ ol.geom.CustomCircle.prototype.dispachChange = function () {
  * 鼠标移动
  * @param event
  */
-ol.geom.CustomCircle.prototype.onMouseMove = function (event) {
+ol.plugins.CustomCircle.prototype.onMouseMove = function (event) {
   if (this.isMouseDown) {
     this.mathRadius(event.coordinate)
   }
@@ -298,7 +299,7 @@ ol.geom.CustomCircle.prototype.onMouseMove = function (event) {
  * 移动时 重新设置半径 重新构建圆 更新半径显示数值
  * @param coords
  */
-ol.geom.CustomCircle.prototype.mathRadius = function (coords) {
+ol.plugins.CustomCircle.prototype.mathRadius = function (coords) {
   this.isMoving = true
   if (this.center && coords) {
     let c1 = ol.proj.transform(this.center, this._getProjectionCode(), 'EPSG:4326')
