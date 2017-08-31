@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>customCircle</title>
+  <script src="../node_modules/openlayers/dist/ol.js"></script>
+  <link rel="stylesheet" href="../node_modules/openlayers/dist/ol.css"/>
 </head>
 <body>
 <div id="map"></div>
-<script src="../node_modules/openlayers/dist/ol.js"></script>
 <script src="../dist/customCircle.min.js"></script>
-<link rel="stylesheet" href="../node_modules/openlayers/dist/ol.css"/>
+<link rel="stylesheet" href="../dist/static/css/customCircle.css"/>
 <script type="text/javascript">
   var map = new ol.Map({
     layers: [
@@ -26,7 +27,12 @@
   map.once('singleclick', function (event) {
     new ol.geom.CustomCircle({
       center: event.coordinate,
-      map: map
+      map: map,
+      showCenterFeature: false,
+      radius: 3000,
+      onRadiusChangeEnd: function (event) {
+        console.log(event)
+      }
     })
   })
 </script>
