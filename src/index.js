@@ -6,6 +6,7 @@ import './scss/customCircle.scss'
 import * as htmlUtils from 'nature-dom-util/src/utils/domUtils'
 import * as utils from 'nature-dom-util/src/utils/utils'
 import * as css from './dom/css'
+import * as style from './style/style'
 ol.geom.CustomCircle = function (params) {
   /**
    * 当前配置
@@ -17,6 +18,10 @@ ol.geom.CustomCircle = function (params) {
     throw new Error('缺少底图对象！')
   } else {
     this.map = this.options['map']
+  }
+
+  if (!this.options['center'] || !(this.options['center'] instanceof Array)) {
+    throw new Error('圆心坐标格式有误！')
   }
 
   /**
@@ -109,6 +114,8 @@ ol.geom.CustomCircle.prototype.initCircle = function (center) {
     layerName: this.options['layerName'],
     source: new ol.source.Vector()
   })
+  let styles = style.getStyleByPolygon(this.options['style'])
+  layer.setStyle(styles)
   layer.getSource().addFeature(this.circleFeature)
   /**
    * 是否添加中心点
