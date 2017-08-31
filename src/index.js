@@ -70,10 +70,10 @@ ol.geom.CustomCircle.prototype.initCircle = function (center) {
   this.center = center
   this.centerCopy = ol.proj.transform(center, this._getProjectionCode(), 'EPSG:4326')
   this.geom = this._getCircleGeom()
-  // if (this.geom && this.options['zoomToExtent']) {
-  //   let extent = this.geom.getExtent()
-  //   this.zoomToExtent(extent, true)
-  // }
+  if (this.geom && this.options['zoomToExtent']) {
+    let extent = this.geom.getExtent()
+    this.zoomToExtent(extent)
+  }
   this.circleFeature = new ol.Feature({
     geometry: this.geom
   })
@@ -129,5 +129,19 @@ ol.geom.CustomCircle.prototype.transformRadius = function (center, meterRadius) 
     return transformRadiu
   } catch (e) {
     console.log(e)
+  }
+}
+
+/**
+ * extent 适当更新范围
+ * @param extent
+ */
+ol.geom.CustomCircle.prototype.zoomToExtent = function (extent) {
+  if (this.map) {
+    let view = this.map.getView()
+    let size = this.map.getSize()
+    view.fit(extent, {
+      size: size
+    })
   }
 }
