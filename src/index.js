@@ -127,8 +127,10 @@ ol.plugins.CustomCircle.prototype.initCircle = function (center) {
     layerName: this.options['layerName'],
     source: new ol.source.Vector()
   })
-  let styles = style.getStyleByPolygon(this.options['style'])
-  layer.setStyle(styles)
+  if (this.options['showPolygonFeature']) {
+    let styles = style.getStyleByPolygon(this.options['style'])
+    layer.setStyle(styles)
+  }
   layer.getSource().addFeature(this.circleFeature)
   /**
    * 是否添加中心点
