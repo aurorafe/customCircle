@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>customCircle</title>
+  <link rel="shortcut icon" href="./../asset/logo.png">
   <script src="../node_modules/openlayers/dist/ol.js"></script>
   <link rel="stylesheet" href="../node_modules/openlayers/dist/ol.css"/>
 </head>
@@ -28,10 +29,20 @@
     new ol.plugins.CustomCircle({
       center: event.coordinate,
       map: map,
-      showCenterFeature: false,
+      showCenterFeature: true,
       radius: 3000,
       onRadiusChangeEnd: function (event) {
         console.log(event)
+      },
+      centerStyle: {
+        stroke: {
+          strokeColor: 'rgba(71, 129, 217, 1)',
+          strokeWidth: 1
+        },
+        fill: {
+          fillColor: 'rgba(71, 129, 217, 1)'
+        },
+        circleRadius: 5
       }
     })
   })

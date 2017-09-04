@@ -33,6 +33,11 @@ export const getStyleByPolygon = function (options) {
   return style
 }
 
+/**
+ * 获取边框样式
+ * @param options
+ * @returns {*}
+ */
 export const getStroke = function (options) {
   try {
     let stroke = new ol.style.Stroke({
@@ -54,6 +59,11 @@ export const getStroke = function (options) {
   }
 }
 
+/**
+ * 获取填充样式
+ * @param options
+ * @returns {*}
+ */
 export const getFill = function (options) {
   try {
     let fill = new ol.style.Fill({
@@ -66,5 +76,32 @@ export const getFill = function (options) {
     }
   } catch (error) {
     console.log(error)
+  }
+}
+
+/**
+ * 获取圆样式
+ * @param options
+ * @returns {*}
+ */
+export const getRegularCircle = function (options) {
+  try {
+    let circle = new ol.style.Circle({
+      fill: new ol.style.Fill({
+        color: (options['fill'] && options['fill']['fillColor'] ? options['fill']['fillColor'] : 'rgba(255,255,255,1)')
+      }),
+      radius: ((options['circleRadius'] && typeof options['circleRadius'] === 'number') ? options['circleRadius'] : 0),
+      stroke: new ol.style.Stroke({
+        color: (options['stroke'] && options['stroke']['strokeColor'] ? options['stroke']['strokeColor'] : 'rgba(255,0,0,1)'),
+        width: (options['stroke'] && options['stroke']['strokeWidth'] ? options['stroke']['strokeWidth'] : 1)
+      })
+    })
+    if (circle && circle instanceof ol.style.Circle) {
+      return circle
+    } else {
+      return false
+    }
+  } catch (e) {
+    console.log(e)
   }
 }

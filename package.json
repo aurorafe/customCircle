@@ -14,10 +14,10 @@
     "map",
     "loading"
   ],
-  "author": "FDD <smileFDD@gmail.com>",
+  "author": "zhangyp <zyp15811451270@163.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aurorafe/ol-control-loading.git"
+    "url": "https://github.com/pingpingEE/customCircle.git"
   },
   "dependencies": {
     "nature-dom-util": "^1.1.0",

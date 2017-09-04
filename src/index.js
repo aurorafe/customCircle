@@ -52,6 +52,16 @@ ol.plugins.CustomCircle = function (params) {
       fill: {
         fillColor: 'rgba(255, 255, 255, 0)'
       }
+    },
+    centerStyle: {
+      stroke: {
+        strokeColor: 'rgba(71, 129, 217, 1)',
+        strokeWidth: 1
+      },
+      fill: {
+        fillColor: 'rgba(255,255,255,0.5)'
+      },
+      circleRadius: 5
     }
   }
 
@@ -88,7 +98,9 @@ ol.plugins.CustomCircle = function (params) {
    * @type {null}
    */
   this.handleLabel = null
-
+  /**
+   * 初始化圆
+   */
   this.initCircle(this.options['center'])
 }
 
@@ -199,16 +211,7 @@ ol.plugins.CustomCircle.prototype.addCenterPoint = function (layer) {
     geometry: new ol.geom.Point(this.center)
   })
   let centerStyle = new ol.style.Style({
-    image: new ol.style.Circle({
-      radius: 5,
-      stroke: new ol.style.Stroke({
-        color: 'rgba(71, 129, 217, 1)',
-        width: 1
-      }),
-      fill: new ol.style.Fill({
-        color: 'rgba(255,255,255,0.5)'
-      })
-    })
+    image: style.getRegularCircle(this.options['centerStyle'])
   })
   this.centerPoint.setStyle(centerStyle)
   layer.getSource().addFeature(this.centerPoint)
